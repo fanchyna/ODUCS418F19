@@ -20,6 +20,7 @@ if($result->num_rows > 0)
             $_SESSION['family_name']=$row['name'];
             $_SESSION['email']=$row['email'];
             $_SESSION['phnum']=$row['ph_number'];
+            $_SESSION['our_system'] = 1;
             echo "1";
         }
     }

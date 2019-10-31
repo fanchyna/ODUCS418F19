@@ -1,10 +1,17 @@
 <?php
 session_start();
 require_once("./navbar.php");
+if(isset($_SESSION['our_system']))
+{
+  header("Location: http://localhost/user_control.php"); 
+  exit();
+}
 if(isset($_SESSION['id']))
 {
   echo "<script>$('#display').html('Welcome ".$_SESSION['family_name']."');</script>";
   echo "<script>$('#logout').attr('hidden',false);</script>";
+  echo "<script>$('#contribute').attr('hidden',false);</script>";
+
 }
 else
 {

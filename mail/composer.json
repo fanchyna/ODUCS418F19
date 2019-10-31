@@ -1,0 +1,9 @@
+{
+    "name": "Mailer",
+    "description": "Swiftmailer sends mails to people you love",
+    "homepage": "http://localhost/index.php",
+    "type": "project",
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2.1.0"
+    }
+}

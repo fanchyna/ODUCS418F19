@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -7,13 +6,13 @@
         </title>
     </head>
 	<meta charset="utf-8">
-	
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="./css/main.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="stylesheet" media="screen" href="./css/style.css">
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://rawgit.com/leizongmin/js-xss/master/dist/xss.js"></script>
 
 <!-- particles.js container -->
 <body id="particles-js">
@@ -29,6 +28,7 @@ if(isset($_SESSION['id']))
 {
   echo "<script>$('#display').html('Welcome ".$_SESSION['family_name']."');</script>";
   echo "<script>$('#logout').attr('hidden',false);</script>";
+  echo "<script>$('#contribute').attr('hidden',false);</script>";
 }
 else
 {
@@ -50,18 +50,26 @@ if(isset($_COOKIE['id']))
 
 ?>
 <!-- Footer 1 - Left Social/Right Menu -->
+
 <div class="search-text text-center col-lg"> 
 	<h1 class="display-3">BestSearch</h1>
-	<p id="ex1">A hassle free search engine for your favourite smartphone </p>
-	<div class="best-search-form">
+	<p id="ex1">A hassle free search engine for your favourite smartphone</p>
+	<form class="best-search-form" method="POST" action="./search_page.php">
 		<div id="search-form" class="form-search form-horizontal">
 			<div class="form-group form-group-lg">
-				<input type="text" class="form-control input-lg col-lg-4 input-search" value="" placeholder="" id="search" name="search">
+				<input type="text" class="form-control input-lg col-lg-4 input-search" value="" placeholder="" id="search" oninput="safe();" name="search">
+				<input type="text" class="form-control input-lg col-lg-4 input-search" value="0" id="opt"  name="option_sel" hidden>
+				<script>
+				function safe(){
+				var safe_query = filterXSS($("#search").val());
+				$("#search").val(safe_query).trim();
+				}
+				</script>
 				<button type="submit" class="btn-search btn col-mg-auto" id="submit" class="submit">Search</button>
 			</div>
 </div>
-	</div>
-	<p>Try searching : &nbsp;&nbsp;&nbsp;<a href="https://www.apple.com">iphones</a>&nbsp;&nbsp;<a href="https://www.android.com">Android</a>&nbsp;&nbsp;&nbsp;<a href="https://store.google.com/product/pixel_3a">Pixel camera</a></p>
+</form>
+	<p>Try searching : &nbsp;&nbsp;&nbsp;<a href="https://www.apple.com">iphone</a>&nbsp;&nbsp;<a href="https://www.android.com">Android</a>&nbsp;&nbsp;&nbsp;<a href="https://store.google.com/product/pixel_3a">Pixel camera</a></p>
 	<p><a href="./advansearch.php">Advanced Search</a></p>             
 </div>
 
@@ -80,12 +88,6 @@ if(isset($_COOKIE['id']))
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script>
 	$(document).ready(function(){
-		$("#submit").click(function(){
-			swal("You are awesome", "Just a few more days to use this functionality!", "success").then(function(){
-				window.location.reload();
-			});
-		})
-
 		$("#logout").click(function(){
 			 $.ajax({
 				 url:"./logout.php",
@@ -137,7 +139,7 @@ placeholder = function(){
 var obj = new placeholder();
 obj.interval_time(10000); 
 obj.set_fields({
-  'search': 'Find out amazing things about smartphones'
+  'search': 'Search using keywords.Like.......try "iphone" or "samsung"....And enjoy!'
 });
 	</script>
 </body>

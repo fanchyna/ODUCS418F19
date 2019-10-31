@@ -40,6 +40,10 @@
         <a class="nav-link" href="./pre_edit_login.php">Control Section
         </a>
       </li>
+      <li class="nav-item" id="contribute" hidden>
+        <a class="nav-link" href="./contribute.php">Contribute
+        </a>
+      </li>
     </ul>
     <ul class="navbar-nav ml-auto nav-flex-icons">
     <li class="nav-item">

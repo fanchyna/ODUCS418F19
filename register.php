@@ -6,6 +6,7 @@ if(isset($_SESSION['id']))
 {
   echo "<script>$('#display').html('Welcome ".$_SESSION['family_name']."');</script>";
   echo "<script>$('#logout').attr('hidden',false);</script>";
+  echo "<script>$('#contribute').attr('hidden',false);</script>";
 }
 else
 {

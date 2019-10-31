@@ -1,0 +1,21 @@
+
+body{
+  background: #FFFFF0;
+}
+
+.searchresults {
+  margin-left: 166px;
+  margin-right: auto;
+  position: relative;
+}
+
+
+#model_details {
+  font-size: 16px;
+  margin-top: -23px;
+  line-height: 18.2px;
+}
+
+#content{
+  margin-left:2%;
+}
