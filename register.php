@@ -84,7 +84,7 @@ if(isset($_COOKIE['id']))
       alert("Email not valid");  
       flag = 0;
       }
-      else if(inp_phone_2.length < 7)
+      else if(inp_phone_2.length < 7 || inp_phone_2.length > 7)
       {
         alert("Enter a valid phone number");
         flag = 0;

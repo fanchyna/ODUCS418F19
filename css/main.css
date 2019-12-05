@@ -66,11 +66,36 @@ p a {
 }
 
 .copyright {
-  position: absolute;
+  
   width: 100%;
   bottom: 0;
   padding:1%;
   background: #33b5e5;
   color: white;
   
+}
+
+#listId .pagination li{
+  padding:10px;
+  border: 1px solid #ccc;
+  
+}
+
+#listId .pagination{
+  background: #ccc;
+  display: inline-flex;
+}
+
+#pag{
+  text-align: center;
+}
+
+#listId .pagination li a{
+  text-decoration: none;
+}
+
+.highlight {
+
+  color: orange;
+  /* more styles here */
 }

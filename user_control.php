@@ -80,13 +80,126 @@ $(document).ready(function(){
 			 })
 		})
 
-
-    // var revokeAllScopes = function () {
-    //   auth2.disconnect();
-    // }
+        $.ajax({
+            async:false,
+            url:"./fetch_fav.php",
+            type:"post",
+            success:function(res){
+                if(res=="1")
+                {
+                    $("#notice").attr("hidden",false);
+                    $("#display_table").attr("hidden",true);
+                }
+                else
+                {
+                    $("#notice").attr("hidden",true);
+                    $("#display_table").attr("hidden",false);
+                    var results = JSON.parse(res);
+                    var doc_ids = [];
+                    var date_arr = [];
+                    var queries = [];
+                    var info = [];
+                    for(key in results)
+                    {
+                        var spstr = key.split(" ");
+                        doc_ids.push(spstr[0]);
+                        $.ajax({
+                            async:false,
+                            url:"./fetch_fav_info.php",
+                            type:"post",
+                            data:{
+                                 "doc_id": spstr[0]
+                                },
+                                success:function(res){
+                                  info.push(res);  
+                                }
+                            });
+                        var date_str = spstr[1]+" "+spstr[2];
+                        date_arr.push(date_str);
+                        queries.push(results[key]);
+                    }
+                    for(i=0; i<doc_ids.length; i++)
+                    {
+                        $("#contents").append("<tr><td><a href='http://localhost/info_page.php?disp_id="+doc_ids[i]+"'>"+queries[i]+"</a></td><td>"+date_arr[i]+"</td><td>"+info[i]+"/\n<a href='http://localhost/info_page.php?disp_id="+doc_ids[i]+"' style='color:blue'>More information</a></td><td><button class='btn btn-primary btn-sm' onclick=\"delete_row("+doc_ids[i]+");\">Delete</button></td></tr>");
+                    }
+                }
+            }
+        });
+    
 	})
 </script>
 <script>
+function delete_row(num)
+{
+   var res = confirm("Do you want to delete this entry?");
+   if(res==true)
+   {
+    $.ajax({
+            async:false,
+            url:"./delete_fav.php",
+            type:"post",
+            data:{
+                "doc_id":num
+            },
+            success:function(res){
+                if(res=="1")
+                {
+                    $("#contents").empty();
+                    $.ajax({
+            async:false,
+            url:"./fetch_fav.php",
+            type:"post",
+            success:function(res){
+                if(res=="1")
+                {
+                    $("#notice").attr("hidden",false);
+                    $("#display_table").attr("hidden",true);
+                }
+                else
+                {
+                    $("#notice").attr("hidden",true);
+                    $("#display_table").attr("hidden",false);
+                    var results = JSON.parse(res);
+                    var doc_ids = [];
+                    var date_arr = [];
+                    var queries = [];
+                    var info = [];
+                    for(key in results)
+                    {
+                        var spstr = key.split(" ");
+                        doc_ids.push(spstr[0]);
+                        $.ajax({
+                            async:false,
+                            url:"./fetch_fav_info.php",
+                            type:"post",
+                            data:{
+                                 "doc_id": spstr[0]
+                                },
+                                success:function(res){
+                                  info.push(res);  
+                                }
+                            });
+                        var date_str = spstr[1]+" "+spstr[2];
+                        date_arr.push(date_str);
+                        queries.push(results[key]);
+                    }
+                    for(i=0; i<doc_ids.length; i++)
+                    {
+                        $("#contents").append("<tr><td><a href='http://localhost/info_page.php?disp_id="+doc_ids[i]+"'>"+queries[i]+"</a></td><td>"+date_arr[i]+"</td><td>"+info[i]+"/\n<a href='http://localhost/info_page.php?disp_id="+doc_ids[i]+"' style='color:blue'>More information</a></td><td><button class='btn btn-primary btn-sm' onclick=\"delete_row("+doc_ids[i]+");\">Delete</button></td></tr>");
+                    }
+                }
+            }
+        });
+    
+                }
+                else
+                {
+                    alert(res);
+                }
+            }
+        });
+   }
+}
  function call_update()
 {
     checkRecaptcha(1);
@@ -150,7 +263,7 @@ function call_pass()
           alert("Please enter all fields and retry!");
           flag = 0;
         }
-        else if(phnum.length < 10)
+        else if(phnum.length < 10 || phnum.length > 10)
         {
         alert("Enter a valid phone number");
         flag = 0;
@@ -279,7 +392,27 @@ function backend_API_challenge() {
         <button type="submit" class="btn btn-primary btn-block" onclick="call_pass();" id="pass_button" hidden>Change Password</button>
     </div> <!-- form-group// -->      
     <p class="text-center">Want to change password?<a id="change_password" style="color:blue;">&nbsp;Click here</a></p>
-    <p class="text-center">Want to update profile?<a id="update_profile" style="color:blue;">&nbsp;Click here</a> </p>                                                                 
+    <p class="text-center">Want to update profile?<a id="update_profile" style="color:blue;">&nbsp;Click here</a> </p> 
+    <br><br>
+    <p class="divider-text">
+        <span class="bg-light"></span>
+    </p>
+    <h5 class="text-center" style="color:green;" id="notice" hidden>Your current favourite list is empty</h5>
+    <div id="display_table" hidden>
+    <h4 class="text-center"><b>Your Favourite Searches</b></h4>
+    <table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Phones</th>
+      <th scope="col">Saved Timestamp</th>
+      <th scope="col">Brief Specification</th>
+    </tr>
+  </thead>
+  <tbody id="contents">
+ 
+  </tbody>
+</table> 
+</div>                                                               
 </div>
 </article>
 </div> <!-- card.// -->

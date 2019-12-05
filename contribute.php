@@ -118,12 +118,12 @@ $(document).ready(function(){
 
 	<div class="form-group"> 
 		<label class="control-label">Brand</label>
-		<input type="text" class="form-control" id="brand" name="brand" placeholder="iphone">
+		<input type="text" class="form-control" id="brand" name="brand" placeholder="iphone" required>
 	</div>	
 
 	<div class="form-group">
 		<label class="control-label">Model</label>
-		<input type="text" class="form-control" id="model" name="model" placeholder="11 pro Max">
+		<input type="text" class="form-control" id="model" name="model" placeholder="11 pro Max" required>
 	</div>					
 							
 	<div class="form-group">
@@ -143,7 +143,7 @@ $(document).ready(function(){
 		<label class="control-label">Phone Image Url</label><br>
 		<input type="url" name="url" id="url"
        placeholder="http://cdn2.gsmarena.com/vv/bigpic/acer-liquid-z6-plus.jpg"
-       pattern="http.://.*" size="100">
+       pattern="http.://.*" size="100" required>
 	</div>									
 
 	<div class="form-group">

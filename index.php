@@ -12,7 +12,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="stylesheet" media="screen" href="./css/style.css">
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <script src="https://rawgit.com/leizongmin/js-xss/master/dist/xss.js"></script>
+  <script type='text/javascript' src='./JavaScriptSpellCheck/include.js' ></script>
+  <script>
+  var timoutInterval
+function keyStroke(){
+clearTimeout(timoutInterval)
+timoutInterval =setTimeout( ajaxDYM(),500)
+}
+
+function fixSuggestions(link){
+         SearchBoxText = document.getElementById('search').value = link.innerHTML;
+     link.innerHTML = "";
+}
+
+function ajaxDYM(){
+        var SearchBoxText = document.getElementById('search').value;
+
+        o = $Spelling.AjaxDidYouMean(SearchBoxText)
+
+        o.onDidYouMean = function(result){
+                        var oSuggestionLink= document.getElementById('suggestionLink');
+                if(result){
+
+                oSuggestionLink.innerHTML = result
+        }else{
+                oSuggestionLink.innerHTML = "";
+        }
+        }
+}
+  </script>
 
 <!-- particles.js container -->
 <body id="particles-js">
@@ -54,21 +82,19 @@ if(isset($_COOKIE['id']))
 <div class="search-text text-center col-lg"> 
 	<h1 class="display-3">BestSearch</h1>
 	<p id="ex1">A hassle free search engine for your favourite smartphone</p>
-	<form class="best-search-form" method="POST" action="./search_page.php">
+	<form class="best-search-form" method="POST" action="./search_page.php" id="form_sub">
 		<div id="search-form" class="form-search form-horizontal">
 			<div class="form-group form-group-lg">
-				<input type="text" class="form-control input-lg col-lg-4 input-search" value="" placeholder="" id="search" oninput="safe();" name="search">
+				<input type="text" class="form-control input-lg col-lg-4 input-search" value="" placeholder="" id="search"  name="search" spellcheck="true" onKeyUp="keyStroke()">
+				<br>
+				<div ><a id='suggestionLink' href='#' style="color:orange;" onclick='fixSuggestions(this); return false;'></a></div>
 				<input type="text" class="form-control input-lg col-lg-4 input-search" value="0" id="opt"  name="option_sel" hidden>
-				<script>
-				function safe(){
-				var safe_query = filterXSS($("#search").val());
-				$("#search").val(safe_query).trim();
-				}
-				</script>
-				<button type="submit" class="btn-search btn col-mg-auto" id="submit" class="submit">Search</button>
+				<button type="submit" class="btn-search btn col-mg-auto" id="submitbtn" class="submit">Search</button>
 			</div>
 </div>
 </form>
+<button id='btnGiveCommand' style="background-color:transparent; border: none;"><i class="fas fa-microphone" style="color:white;"></i>&nbsp;</button>
+<p style="color:orange;" id="msg">Click on the microphone button to start voice search</p>
 	<p>Try searching : &nbsp;&nbsp;&nbsp;<a href="https://www.apple.com">iphone</a>&nbsp;&nbsp;<a href="https://www.android.com">Android</a>&nbsp;&nbsp;&nbsp;<a href="https://store.google.com/product/pixel_3a">Pixel camera</a></p>
 	<p><a href="./advansearch.php">Advanced Search</a></p>             
 </div>
@@ -86,6 +112,8 @@ if(isset($_COOKIE['id']))
 <script src="./js/app.js"></script>
 
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script>
 <script>
 	$(document).ready(function(){
 		$("#logout").click(function(){
@@ -96,7 +124,40 @@ if(isset($_COOKIE['id']))
 				 }
 			 })
 		})
+
+        var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+        var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+        var grammar = '#JSGF V1.0;'
+        var recognition = new SpeechRecognition();
+        var speechRecognitionList = new SpeechGrammarList();
+        speechRecognitionList.addFromString(grammar, 1);
+        recognition.grammars = speechRecognitionList;
+        recognition.lang = 'en-US';
+        recognition.interimResults = true;
+        recognition.onresult = function(event) {
+            var last = event.results.length - 1;
+            var command = event.results[last][0].transcript;
+			$("#search").val(command);
+        };
+        recognition.onspeechend = function() {
+			recognition.stop();
+			// $("#form_sub").ajaxSubmit({url: 'search_page.php', type: 'post'});
+			$("#msg").html("Recorded, Initiating search operation.....");
+			setTimeout(function(){document.getElementById("form_sub").submit(); }, 2000);
+			
+        };
+        recognition.onerror = function(event) {
+            message.textContent = 'Error occurred in recognition: ' + event.error;
+        }        
+        // document.querySelector('#btnGiveCommand').addEventListener('click', function(){
+        //     recognition.start();
+        // });
+		$("#btnGiveCommand").click(function(){
+			$("#msg").html("Recording...");
+			recognition.start();
+		});
 	})
+
 	</script>
 
 <script>

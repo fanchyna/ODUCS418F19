@@ -77,6 +77,15 @@ $(document).ready(function(){
 			}
 		})
 	}
+	
+		$("#logout").click(function(){
+			 $.ajax({
+				 url:"./logout.php",
+				 success: function(){
+					window.location.href="index.php";
+				 }
+			 })
+		})
 
 	function backend_API_challenge() {
     var response = grecaptcha.getResponse();

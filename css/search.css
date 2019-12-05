@@ -4,9 +4,9 @@ body{
 }
 
 .searchresults {
-  margin-left: 166px;
-  margin-right: auto;
-  position: relative;
+  margin:0 auto;
+ 
+  width:80%;
 }
 
 
